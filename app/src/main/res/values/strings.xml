@@ -6,7 +6,7 @@
     <string name="choose_photo">Escolher da galeria</string>
     <string name="take_photo">Tirar foto</string>
     <string name="caption_hint">Escreva uma legenda</string>
-    <string name="publish">Publicar</string>
+    <string name="publish">Enviar para a nuvem</string>
     <string name="author_hint">Seu nome (opcional)</string>
     <string name="comment_hint">Escreva um comentário</string>
     <string name="send">Enviar comentário</string>
@@ -14,6 +14,10 @@
     <string name="error_photo">Escolha ou tire uma foto primeiro.</string>
     <string name="error_comment">Escreva um comentário.</string>
     <string name="anonymous">Anônimo</string>
-    <string name="cloudinary_cloud_name">SEU_CLOUD_NAME</string>
-    <string name="cloudinary_upload_preset">SEU_UPLOAD_PRESET</string>
+    <string name="cloudinary_cloud_name" translatable="false">dikitk54o</string>
+    <string name="cloudinary_upload_preset" translatable="false">Tiktoktech</string>
+    <string name="cloudinary_folder" translatable="false">tiktoktech_salaD</string>
+    <string name="uploading_photo">Enviando foto…</string>
+    <string name="upload_success">Upload concluído. Toque na URL para abrir:</string>
+    <string name="upload_error">Não foi possível enviar a foto. Tente novamente.</string>
 </resources>

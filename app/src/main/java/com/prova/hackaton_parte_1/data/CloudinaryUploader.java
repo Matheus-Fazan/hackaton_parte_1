@@ -26,7 +26,8 @@ public final class CloudinaryUploader {
 
     public static boolean isConfigured(Context context) {
         return !context.getString(R.string.cloudinary_cloud_name).startsWith("SEU_")
-                && !context.getString(R.string.cloudinary_upload_preset).startsWith("SEU_");
+                && !context.getString(R.string.cloudinary_upload_preset).startsWith("SEU_")
+                && !context.getString(R.string.cloudinary_folder).isEmpty();
     }
 
     public static void upload(Context context, Uri photo, Callback callback) {
@@ -36,22 +37,27 @@ public final class CloudinaryUploader {
             try {
                 String cloud = context.getString(R.string.cloudinary_cloud_name);
                 String preset = context.getString(R.string.cloudinary_upload_preset);
+                String folder = context.getString(R.string.cloudinary_folder);
                 String boundary = "----TikTokTech" + UUID.randomUUID();
-                HttpURLConnection connection = (HttpURLConnection) new URL("https://api.cloudinary.com/v1_1/" + cloud + "/image/upload").openConnection();
+                HttpURLConnection connection = (HttpURLConnection) new URL(CloudinaryUploadConfig.endpoint(cloud)).openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
+                connection.setConnectTimeout(15_000);
+                connection.setReadTimeout(30_000);
                 connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
                 try (OutputStream output = connection.getOutputStream(); InputStream input = context.getContentResolver().openInputStream(photo)) {
                     if (input == null) throw new IllegalStateException("Não foi possível ler a foto.");
-                    writeField(output, boundary, "upload_preset", preset);
-                    output.write(("--" + boundary + "\r\nContent-Disposition: form-data; name=\"file\"; filename=\"photo.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n").getBytes());
+                    CloudinaryMultipartBody.writeTextField(output, boundary, "upload_preset", preset);
+                    CloudinaryMultipartBody.writeTextField(output, boundary, "folder", folder);
+                    CloudinaryMultipartBody.writeFileHeader(output, boundary, "photo.jpg", "image/jpeg");
                     byte[] buffer = new byte[8192];
                     for (int size; (size = input.read(buffer)) != -1;) output.write(buffer, 0, size);
-                    output.write(("\r\n--" + boundary + "--\r\n").getBytes());
+                    CloudinaryMultipartBody.finish(output, boundary);
                 }
-                InputStream response = connection.getResponseCode() / 100 == 2 ? connection.getInputStream() : connection.getErrorStream();
+                int statusCode = connection.getResponseCode();
+                InputStream response = statusCode / 100 == 2 ? connection.getInputStream() : connection.getErrorStream();
                 String body = readBody(response);
-                if (connection.getResponseCode() / 100 != 2) throw new IllegalStateException(body);
+                if (statusCode / 100 != 2) throw new IllegalStateException("Cloudinary respondeu HTTP " + statusCode + ": " + body);
                 result = new JSONObject(body).getString("secure_url");
             } catch (Exception error) {
                 failure = error;
@@ -62,16 +68,12 @@ public final class CloudinaryUploader {
         });
     }
 
-    private static void writeField(OutputStream output, String boundary, String name, String value) throws Exception {
-        output.write(("--" + boundary + "\r\nContent-Disposition: form-data; name=\"" + name + "\"\r\n\r\n" + value + "\r\n").getBytes());
-    }
-
     private static String readBody(InputStream input) throws Exception {
         if (input == null) return "Resposta vazia.";
         try (InputStream stream = input; ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[4096];
             for (int size; (size = stream.read(buffer)) != -1;) output.write(buffer, 0, size);
-            return output.toString();
+            return output.toString("UTF-8");
         }
     }
 }
