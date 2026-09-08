@@ -14,6 +14,7 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.prova.hackaton_parte_1.R;
 import com.prova.hackaton_parte_1.data.CloudinaryUploader;
+import com.prova.hackaton_parte_1.ui.common.ImageLoader;
 import com.prova.hackaton_parte_1.data.FeedRepository;
 import com.prova.hackaton_parte_1.data.FeedRepositoryFactory;
 import com.prova.hackaton_parte_1.data.model.Post;
@@ -50,6 +51,18 @@ public final class NewPostActivity extends AppCompatActivity {
         });
         binding.choosePhoto.setOnClickListener(v -> gallery.launch("image/*"));
         binding.publish.setOnClickListener(v -> publish());
+        if (savedInstanceState != null) {
+            String pending = savedInstanceState.getString("pending_photo");
+            pendingCameraPhoto = pending == null ? null : Uri.parse(pending);
+            String selected = savedInstanceState.getString("selected_photo");
+            if (selected != null) showSelectedPhoto(Uri.parse(selected));
+        }
+    }
+
+    @Override protected void onSaveInstanceState(Bundle state) {
+        if (photo != null) state.putString("selected_photo", photo.toString());
+        if (pendingCameraPhoto != null) state.putString("pending_photo", pendingCameraPhoto.toString());
+        super.onSaveInstanceState(state);
     }
 
     private void publish() {
@@ -90,7 +103,7 @@ public final class NewPostActivity extends AppCompatActivity {
 
     private void showSelectedPhoto(Uri selectedPhoto) {
         photo = selectedPhoto;
-        binding.preview.setImageURI(selectedPhoto);
+        ImageLoader.load(binding.preview, selectedPhoto.toString());
         binding.uploadLabel.setVisibility(View.GONE);
         binding.uploadUrl.setText(null);
         binding.uploadUrl.setVisibility(View.GONE);

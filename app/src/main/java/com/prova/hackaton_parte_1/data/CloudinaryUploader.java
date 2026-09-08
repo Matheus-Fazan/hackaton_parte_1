@@ -1,11 +1,12 @@
 package com.prova.hackaton_parte_1.data;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.prova.hackaton_parte_1.R;
 import com.prova.hackaton_parte_1.BuildConfig;
 
 import org.json.JSONObject;
@@ -46,13 +47,11 @@ public final class CloudinaryUploader {
                 connection.setConnectTimeout(15_000);
                 connection.setReadTimeout(30_000);
                 connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-                try (OutputStream output = connection.getOutputStream(); InputStream input = context.getContentResolver().openInputStream(photo)) {
-                    if (input == null) throw new IllegalStateException("Não foi possível ler a foto.");
+                try (OutputStream output = connection.getOutputStream()) {
                     CloudinaryMultipartBody.writeTextField(output, boundary, "upload_preset", preset);
                     CloudinaryMultipartBody.writeTextField(output, boundary, "folder", folder);
                     CloudinaryMultipartBody.writeFileHeader(output, boundary, "photo.jpg", "image/jpeg");
-                    byte[] buffer = new byte[8192];
-                    for (int size; (size = input.read(buffer)) != -1;) output.write(buffer, 0, size);
+                    writePhoto(context, photo, output);
                     CloudinaryMultipartBody.finish(output, boundary);
                 }
                 int statusCode = connection.getResponseCode();
@@ -67,6 +66,26 @@ public final class CloudinaryUploader {
             Exception error = failure;
             new Handler(Looper.getMainLooper()).post(() -> callback.complete(url, error));
         });
+    }
+
+    static void writePhoto(Context context, Uri photo, OutputStream output) throws java.io.IOException {
+        Bitmap bitmap = ImageDecoder.decodeBitmap(
+                ImageDecoder.createSource(context.getContentResolver(), photo),
+                (decoder, info, source) -> {
+                    int width = info.getSize().getWidth();
+                    int height = info.getSize().getHeight();
+                    double scale = Math.min(1.0, 1600.0 / Math.max(width, height));
+                    decoder.setTargetSize(Math.max(1, (int) (width * scale)),
+                            Math.max(1, (int) (height * scale)));
+                    decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE);
+                });
+        try {
+            if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 80, output)) {
+                throw new java.io.IOException("Não foi possível comprimir a foto.");
+            }
+        } finally {
+            bitmap.recycle();
+        }
     }
 
     private static String readBody(InputStream input) throws Exception {
