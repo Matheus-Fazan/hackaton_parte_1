@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="navy">#102542</color>
+    <color name="amber">#F6A623</color>
+    <color name="screen">#F2F4F8</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="text_primary">#12203A</color>
+    <color name="text_secondary">#5B6980</color>
+    <color name="divider">#DDE3EC</color>
 </resources>
