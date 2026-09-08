@@ -14,6 +14,9 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.prova.hackaton_parte_1.R;
 import com.prova.hackaton_parte_1.data.CloudinaryUploader;
+import com.prova.hackaton_parte_1.data.FeedRepository;
+import com.prova.hackaton_parte_1.data.FeedRepositoryFactory;
+import com.prova.hackaton_parte_1.data.model.Post;
 import com.prova.hackaton_parte_1.databinding.ActivityNewPostBinding;
 
 import java.io.File;
@@ -23,11 +26,13 @@ public final class NewPostActivity extends AppCompatActivity {
     private Uri photo;
     private Uri pendingCameraPhoto;
     private ActivityResultLauncher<Uri> camera;
+    private FeedRepository repository;
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNewPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        repository = FeedRepositoryFactory.get(this);
         binding.toolbar.setNavigationIcon(android.R.drawable.ic_media_previous);
         binding.toolbar.setNavigationOnClickListener(v -> finish());
         camera = registerForActivityResult(new ActivityResultContracts.TakePicture(), ok -> {
@@ -65,6 +70,14 @@ public final class NewPostActivity extends AppCompatActivity {
             binding.uploadLabel.setVisibility(View.VISIBLE);
             binding.uploadUrl.setText(url);
             binding.uploadUrl.setVisibility(View.VISIBLE);
+            repository.createPost(new Post(url, String.valueOf(binding.caption.getText()).trim()), saveError -> {
+                if (saveError != null) {
+                    Snackbar.make(binding.getRoot(), saveError.getMessage(), Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                binding.publish.setText("Publicado no feed");
+                Snackbar.make(binding.getRoot(), R.string.upload_success, Snackbar.LENGTH_LONG).show();
+            });
         });
     }
 

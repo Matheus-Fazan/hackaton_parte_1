@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.prova.hackaton_parte_1.R;
+import com.prova.hackaton_parte_1.BuildConfig;
 
 import org.json.JSONObject;
 
@@ -25,9 +26,9 @@ public final class CloudinaryUploader {
     private CloudinaryUploader() { }
 
     public static boolean isConfigured(Context context) {
-        return !context.getString(R.string.cloudinary_cloud_name).startsWith("SEU_")
-                && !context.getString(R.string.cloudinary_upload_preset).startsWith("SEU_")
-                && !context.getString(R.string.cloudinary_folder).isEmpty();
+        return !BuildConfig.CLOUDINARY_CLOUD_NAME.isEmpty()
+                && !BuildConfig.CLOUDINARY_UPLOAD_PRESET.isEmpty()
+                && !BuildConfig.CLOUDINARY_FOLDER.isEmpty();
     }
 
     public static void upload(Context context, Uri photo, Callback callback) {
@@ -35,9 +36,9 @@ public final class CloudinaryUploader {
             String result = null;
             Exception failure = null;
             try {
-                String cloud = context.getString(R.string.cloudinary_cloud_name);
-                String preset = context.getString(R.string.cloudinary_upload_preset);
-                String folder = context.getString(R.string.cloudinary_folder);
+                String cloud = BuildConfig.CLOUDINARY_CLOUD_NAME;
+                String preset = BuildConfig.CLOUDINARY_UPLOAD_PRESET;
+                String folder = BuildConfig.CLOUDINARY_FOLDER;
                 String boundary = "----TikTokTech" + UUID.randomUUID();
                 HttpURLConnection connection = (HttpURLConnection) new URL(CloudinaryUploadConfig.endpoint(cloud)).openConnection();
                 connection.setRequestMethod("POST");

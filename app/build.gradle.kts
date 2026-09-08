@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
@@ -32,6 +34,19 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+    }
+
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) localPropertiesFile.inputStream().use(localProperties::load)
+    fun localValue(name: String): String = localProperties.getProperty(name, "")
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+    buildTypes.all {
+        buildConfigField("String", "CLOUDINARY_CLOUD_NAME", "\"${localValue("CLOUDINARY_CLOUD_NAME")}\"")
+        buildConfigField("String", "CLOUDINARY_UPLOAD_PRESET", "\"${localValue("CLOUDINARY_UPLOAD_PRESET")}\"")
+        buildConfigField("String", "CLOUDINARY_FOLDER", "\"${localValue("CLOUDINARY_FOLDER")}\"")
     }
 }
 

@@ -14,9 +14,6 @@
     <string name="error_photo">Escolha ou tire uma foto primeiro.</string>
     <string name="error_comment">Escreva um comentário.</string>
     <string name="anonymous">Anônimo</string>
-    <string name="cloudinary_cloud_name" translatable="false">dikitk54o</string>
-    <string name="cloudinary_upload_preset" translatable="false">Tiktoktech</string>
-    <string name="cloudinary_folder" translatable="false">tiktoktech_salaD</string>
     <string name="uploading_photo">Enviando foto…</string>
     <string name="upload_success">Upload concluído. Toque na URL para abrir:</string>
     <string name="upload_error">Não foi possível enviar a foto. Tente novamente.</string>

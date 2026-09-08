@@ -1,0 +1,5 @@
+# Copie para local.properties e preencha os valores da turma.
+sdk.dir=C\\:\\caminho\\para\\Android\\Sdk
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_UPLOAD_PRESET=
+CLOUDINARY_FOLDER=tiktoktech_salaD
