@@ -7,6 +7,9 @@
         <com.google.android.material.button.MaterialButton android:id="@+id/takePhoto" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/take_photo" />
         <com.google.android.material.button.MaterialButton android:id="@+id/choosePhoto" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="@string/choose_photo" />
     </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="16dp" android:hint="@string/caption_hint">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences|textMultiLine" android:maxLines="4" />
+    </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.button.MaterialButton android:id="@+id/publish" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="16dp" android:text="@string/publish" />
     <ProgressBar android:id="@+id/uploadProgress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:contentDescription="@string/uploading_photo" android:visibility="gone" />
     <TextView android:id="@+id/uploadLabel" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="16dp" android:text="@string/upload_success" android:textAppearance="@style/TextAppearance.Material3.BodyMedium" android:visibility="gone" />
