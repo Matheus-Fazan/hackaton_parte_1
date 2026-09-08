@@ -13,14 +13,14 @@ public class CloudinaryMultipartBodyTest {
         String boundary = "test-boundary";
 
         CloudinaryMultipartBody.writeTextField(output, boundary, "upload_preset", "Tiktoktech");
-        CloudinaryMultipartBody.writeTextField(output, boundary, "folder", "tiktoktech_salaD");
+        CloudinaryMultipartBody.writeTextField(output, boundary, "folder", "tiktoktech_salaE");
         CloudinaryMultipartBody.writeFileHeader(output, boundary, "photo.jpg", "image/jpeg");
         output.write(new byte[] {1, 2, 3});
         CloudinaryMultipartBody.finish(output, boundary);
 
         String body = output.toString(StandardCharsets.ISO_8859_1.name());
         assertTrue(body.contains("name=\"upload_preset\"\r\n\r\nTiktoktech"));
-        assertTrue(body.contains("name=\"folder\"\r\n\r\ntiktoktech_salaD"));
+        assertTrue(body.contains("name=\"folder\"\r\n\r\ntiktoktech_salaE"));
         assertTrue(body.contains("filename=\"photo.jpg\"\r\nContent-Type: image/jpeg"));
         assertTrue(body.endsWith("\r\n--test-boundary--\r\n"));
     }
