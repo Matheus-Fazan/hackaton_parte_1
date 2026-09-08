@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        viewModel.getUiState().observe(this, state -> binding.message.setText(state.getMessage()));
+        viewModel.getMessage().observe(this, message -> binding.message.setText(message.getText()));
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (view, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
