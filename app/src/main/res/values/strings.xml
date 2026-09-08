@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">hackaton_parte_1</string>
+    <string name="app_name">TikTokTech</string>
+    <string name="feed_empty">Nenhuma publicação ainda. Toque em + para começar.</string>
+    <string name="new_post">Nova publicação</string>
+    <string name="comments">Comentários</string>
+    <string name="choose_photo">Escolher da galeria</string>
+    <string name="take_photo">Tirar foto</string>
+    <string name="caption_hint">Escreva uma legenda</string>
+    <string name="publish">Publicar</string>
+    <string name="author_hint">Seu nome (opcional)</string>
+    <string name="comment_hint">Escreva um comentário</string>
+    <string name="send">Enviar comentário</string>
+    <string name="no_comments">Seja o primeiro a comentar.</string>
+    <string name="error_photo">Escolha ou tire uma foto primeiro.</string>
+    <string name="error_comment">Escreva um comentário.</string>
+    <string name="anonymous">Anônimo</string>
+    <string name="cloudinary_cloud_name">SEU_CLOUD_NAME</string>
+    <string name="cloudinary_upload_preset">SEU_UPLOAD_PRESET</string>
 </resources>

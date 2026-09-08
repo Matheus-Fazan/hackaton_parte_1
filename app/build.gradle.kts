@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -9,7 +10,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.prova.hackaton_parte_1"
+        applicationId = "com.aula.tiktoktech"
         minSdk = 29
         targetSdk = 37
         versionCode = 1
@@ -40,6 +41,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.lifecycle.livedata)
     implementation(libs.material)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
